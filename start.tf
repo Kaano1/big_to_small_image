@@ -12,7 +12,24 @@ resource "aws_vpc" "terraform_vpc" {
 	}
 }
 
+# Internet Gateway
 
+resource "aws_internet_gateway" "igw" {
+	vpc_id = aws_vpc.terraform_vpc.id
+
+	tags = {
+		Name = "terraform_igw" # Name of the Internet Gateway
+	}
+	
+	depends_on = [aws_vpc.terraform_vpc]
+}
+
+# Nat Gateway
+
+
+
+
+# Subnets Public
 
 # Elastic IP
 
