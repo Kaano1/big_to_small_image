@@ -69,6 +69,61 @@ resource "aws_subnet" "terraform_public_ip_3" {
 
 
 # Subnets Private
+
+resource "aws_subnet" "terraform_private_ip_1" {
+	vpc_id = aws_vpc.terraform_vpc.id
+	cidr_block = "10.0.11.0/24"
+
+	tags = {
+		Name = "terraform_private_ip_1" # Name of the subnet
+	}
+
+	depends_on = [aws_vpc.terraform_vpc]
+}
+
+resource "aws_subnet" "terraform_private_ip_2" {
+	vpc_id = aws_vpc.terraform_vpc.id
+	cidr_block = "10.0.21.0/24"
+
+	tags = {
+		Name = "terraform_private_ip_2" # Name of the subnet
+	}
+
+	depends_on = [aws_vpc.terraform_vpc]
+}
+
+resource "aws_subnet" "terraform_private_ip_3" {
+	vpc_id = aws_vpc.terraform_vpc.id
+	cidr_block = "10.0.31.0/24"
+
+	tags = {
+		Name = "terraform_private_ip_3" # Name of the subnet
+	}
+
+	depends_on = [aws_vpc.terraform_vpc]
+}
+
+# Public Route Tables (Default Route)
+
+resource "aws_default_route_table" "terraform_route_table_public" {
+	default_route_table_id = aws_vpc.terraform_vpc.default_route_table_id
+
+	route {
+		cidr_block = "10.0.0.0/16"
+		gateway_id = "local"
+	}
+
+	route {
+		cidr_block = "0.0.0.0/0"
+		gateway_id = aws_internet_gateway.igw.id
+	}
+
+	tags = {
+		Name = "public_vpc_route_table"
+	}
+}
+
+# Private Route Table
 # Elastic IP
 
 resource "aws_eip" "elastic_ip" {
