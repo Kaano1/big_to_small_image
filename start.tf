@@ -31,6 +31,44 @@ resource "aws_internet_gateway" "igw" {
 
 # Subnets Public
 
+resource "aws_subnet" "terraform_public_ip_1" {
+	vpc_id = aws_vpc.terraform_vpc.id
+	cidr_block = "10.0.10.0/24"
+	map_public_ip_on_launch = true # Enable public IP
+
+	tags = {
+		Name = "terraform_public_ip_1" # Name of the subnet
+	}
+
+	depends_on = [aws_vpc.terraform_vpc]
+}
+
+resource "aws_subnet" "terraform_public_ip_2" {
+	vpc_id = aws_vpc.terraform_vpc.id
+	cidr_block = "10.0.20.0/24"
+	map_public_ip_on_launch = true # Enable public IP
+
+	tags = {
+		Name = "terraform_public_ip_2" # Name of the subnet
+	}
+
+	depends_on = [aws_vpc.terraform_vpc]
+}
+
+resource "aws_subnet" "terraform_public_ip_3" {
+	vpc_id = aws_vpc.terraform_vpc.id
+	cidr_block = "10.0.30.0/24"
+	map_public_ip_on_launch = true # Enable public IP
+
+	tags = {
+		Name = "terraform_public_ip_3" # Name of the subnet
+	}
+
+	depends_on = [aws_vpc.terraform_vpc]
+}
+
+
+# Subnets Private
 # Elastic IP
 
 resource "aws_eip" "elastic_ip" {
