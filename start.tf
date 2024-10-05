@@ -13,6 +13,9 @@ resource "aws_vpc" "terraform_vpc" {
 }
 
 
+
+# Elastic IP
+
 resource "aws_eip" "elastic_ip" {
 	vpc = true
 
