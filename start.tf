@@ -13,3 +13,21 @@ resource "aws_vpc" "terraform_vpc" {
 }
 
 
+resource "aws_eip" "elastic_ip" {
+	vpc = true
+
+	tags = {
+		Name = "terraform_elastic_ip"
+	}
+# Nat Gateway
+
+resource "aws_nat_gateway" "nat_gateway-1" {
+	allocation_id = aws_eip.elastic_ip.id
+	subnet_id = aws_subnet.terraform_public_ip_1.id
+
+	tags = {
+		Name = "terraform_nat_gateway-1"
+	}
+
+	depends_on = [aws_eip.elastic_ip, aws_subnet.terraform_public_ip_1]
+}
