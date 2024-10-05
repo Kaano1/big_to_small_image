@@ -1,11 +1,15 @@
+# Region: eu-north-1
 provider "aws" {
 	region = "eu-north-1" # Stockholm
 }
 
 
+# VPC main_route_table_id
+
 resource "aws_vpc" "terraform_vpc" {
 	cidr_block = "10.0.0.0/16" # 65,536 IP addresses if you want to different size you can change it
 	instance_tenancy = "default" # default or dedicated
+	enable_dns_hostnames = true
 
 	tags = {
 		Name = "terraform_vpc" # Name of the VPC
@@ -124,6 +128,7 @@ resource "aws_default_route_table" "terraform_route_table_public" {
 }
 
 # Private Route Table
+
 resource "aws_route_table" "terraform_route_table_private" {
 	vpc_id = aws_vpc.terraform_vpc.id
 
@@ -240,6 +245,10 @@ resource "aws_eip" "elastic_ip" {
 	tags = {
 		Name = "terraform_elastic_ip"
 	}
+
+	depends_on = [aws_vpc.terraform_vpc]
+}
+
 # Nat Gateway
 
 resource "aws_nat_gateway" "nat_gateway-1" {
