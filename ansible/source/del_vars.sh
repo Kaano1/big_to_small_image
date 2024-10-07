@@ -1,0 +1,1 @@
+sed -i '5,9d' ansible/main.yml
