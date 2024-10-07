@@ -28,14 +28,13 @@ resource "aws_s3_bucket_public_access_block" "public_access_block_s3" {
 resource "aws_s3_bucket_public_access_block" "public_access_block_s3-2" {
   bucket = aws_s3_bucket.ecole-turkey.id
 
-  block_public_acls       = false
-  block_public_policy     = false
-  ignore_public_acls      = false
-  restrict_public_buckets = false
+  block_public_acls       = true
+  block_public_policy     = true
+  ignore_public_acls      = true
+  restrict_public_buckets = true
 
   depends_on = [aws_s3_bucket.ecole-turkey]
 }
-
 
 resource "aws_s3_object" "image_object" {
 	bucket = aws_s3_bucket.ecole-turkey.bucket
