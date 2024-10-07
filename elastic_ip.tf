@@ -1,7 +1,7 @@
 # Elastic IP
 
 resource "aws_eip" "elastic_ip" {
-	vpc = true
+	domain = "vpc"
 
 	tags = {
 		Name = "terraform_elastic_ip"
