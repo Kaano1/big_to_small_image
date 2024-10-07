@@ -9,6 +9,7 @@ resource "aws_subnet" "terraform_public_ip_1" {
 		Name = "terraform_public_ip_1" # Name of the subnet
 	}
 
+	availability_zone = "eu-north-1a"
 	depends_on = [aws_vpc.terraform_vpc]
 }
 
@@ -21,6 +22,7 @@ resource "aws_subnet" "terraform_public_ip_2" {
 		Name = "terraform_public_ip_2" # Name of the subnet
 	}
 
+	availability_zone = "eu-north-1b"
 	depends_on = [aws_vpc.terraform_vpc]
 }
 
@@ -33,6 +35,7 @@ resource "aws_subnet" "terraform_public_ip_3" {
 		Name = "terraform_public_ip_3" # Name of the subnet
 	}
 
+	availability_zone = "eu-north-1c"
 	depends_on = [aws_vpc.terraform_vpc]
 }
 
@@ -47,6 +50,7 @@ resource "aws_subnet" "terraform_private_ip_1" {
 		Name = "terraform_private_ip_1" # Name of the subnet
 	}
 
+	availability_zone = "eu-north-1a"
 	depends_on = [aws_vpc.terraform_vpc]
 }
 
@@ -57,7 +61,8 @@ resource "aws_subnet" "terraform_private_ip_2" {
 	tags = {
 		Name = "terraform_private_ip_2" # Name of the subnet
 	}
-
+	
+	availability_zone = "eu-north-1b"
 	depends_on = [aws_vpc.terraform_vpc]
 }
 
@@ -69,5 +74,6 @@ resource "aws_subnet" "terraform_private_ip_3" {
 		Name = "terraform_private_ip_3" # Name of the subnet
 	}
 
+	availability_zone = "eu-north-1c"
 	depends_on = [aws_vpc.terraform_vpc]
 }
