@@ -1,3 +1,5 @@
+The Big_to_small_image application stores user information entered into a PHP-based website on AWS RDS and uploads user-submitted images to AWS S3 buckets every 2 minutes. These images are automatically resized, and when accessing user information, the images are displayed in their smaller form. This system is built on AWS infrastructure using Terraform and Ansible.
+
 ## Requirements
 
 1. **Terraform**: Download and install Terraform. [Download Terraform](https://www.terraform.io/downloads.html)
