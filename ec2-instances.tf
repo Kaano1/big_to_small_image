@@ -10,7 +10,7 @@ resource "aws_instance" "terraform-ec2-instance" {
 		Name = "terraform-ec2-instance"
 	}
 
-	depends_on = [aws_security_group.security_group, aws_subnet.terraform_public_ip_1, aws_iam_instance_profile.instance_profile]
+	depends_on = [aws_security_group.security_group, aws_subnet.terraform_public_ip_1, aws_iam_instance_profile.instance_profile, aws_efs_file_system.efs, aws_db_instance.rds_instance]
 }
 
 resource "aws_iam_instance_profile" "instance_profile" {
@@ -19,3 +19,4 @@ resource "aws_iam_instance_profile" "instance_profile" {
 
 	depends_on = [aws_iam_role.Ec2-S33]
 }
+

@@ -2,67 +2,68 @@
 - name: Web Setup
   hosts: all
   become: true
+
   
   tasks:
-    - name: Update all packages
+    - name: 1/36. Update all packages
       ansible.builtin.yum:
         name: '*'
         state: latest
 
-    - name: Install httpd
+    - name: 2/36. Install httpd
       ansible.builtin.yum:
         name: httpd
         state: present
 
-    - name: Install MySQL community release RPM
+    - name: 3/36. Install MySQL community release RPM
       ansible.builtin.shell:
         cmd: wget https://dev.mysql.com/get/mysql80-community-release-el9-1.noarch.rpm 
 
-    - name: dfn install mysql-community-client
+    - name: 4/36. dfn install mysql-community-client
       ansible.builtin.shell:
         cmd: dnf install mysql80-community-release-el9-1.noarch.rpm -y
 
-    - name: Import MySQL GPG key
+    - name: 5/36. Import MySQL GPG key
       ansible.builtin.rpm_key:
         state: present
         key: https://repo.mysql.com/RPM-GPG-KEY-mysql-2023
 
-    - name: dfn install mysql-community-client
+    - name: 6/36. dfn install mysql-community-client
       ansible.builtin.shell:
         cmd: dnf install mysql-community-server -y
    
-    - name: Install MySQL client
+    - name: 7/36. Install MySQL client
       ansible.builtin.dnf:
         name: mysql-community-client
         state: present
 
-    - name: Install MySQL community server
+    - name: 8/36. Install MySQL community server
       ansible.builtin.dnf:
         name: mysql-community-server
         state: present
 
-    - name: install php
+    - name: 9/36. install php
       ansible.builtin.yum:
         name: php
         state: present
 
-    - name: Start and enable httpd service
+    - name: 10/36. Start and enable httpd service
       ansible.builtin.service:
         name: httpd
         state: started
         enabled: true
 
-    - name: Move test.php file
+    - name: 11/36. Move test.php file
       ansible.builtin.copy:
         src: source/test.php
         dest: /var/www/html/test.php
 
-    - name: install amazon-efs-utils
+    - name: 12/36. install amazon-efs-utils
       ansible.builtin.yum:
         name: amazon-efs-utils
         state: present
       
-    - name: Create directories if they do not exist
+    - name: 13/36. Create directories if they do not exist
       ansible.builtin.file:
         path: "{{ item }}"
         state: directory
@@ -70,21 +71,21 @@
         - /var/www
         - /var/www/html
 
-    - name: run efs_mount.sh
+    - name: 14/36. run efs_mount.sh
       ansible.builtin.shell:
         cmd: "{{efs_cmd}}"
     
-    - name: run efs_mount_forever.sh
+    - name: 15/36. run efs_mount_forever.sh
       ansible.builtin.shell:
         cmd: "{{efs_mount_forever}}"
 
-    - name: create called images directory
+    - name: 16/36. create called images directory
       ansible.builtin.file:
         path: /var/www/html/images
         state: directory
         mode: '0777'
     
-    - name: Install Python3, pip, and development packages
+    - name: 17/36. Install Python3, pip, and development packages
       ansible.builtin.shell: |
         sudo yum install python3 -y && \
         sudo yum install python3-pip -y && \
@@ -92,13 +93,13 @@
         sudo pip3 install mysqlclient && \
         sudo pip3 install PyMySQL
 
-    - name: active mysql service
+    - name: 18/36. active mysql service
       ansible.builtin.service:
         name: mysqld
         state: started
         enabled: true
 
-    - name: Use the database
+    - name: 19/36. Use the database
       ansible.builtin.mysql_query:
         login_host: "{{ rds_endpoint }}"
         login_port: 3306
@@ -108,7 +109,7 @@
       vars:
         mysql_password: "master1234"
 
-    - name: Create the visitors table
+    - name: 20/36. Create the visitors table
       ansible.builtin.mysql_query:
         login_host: "{{ rds_endpoint }}"
         login_port: 3306
@@ -116,69 +117,69 @@
         login_password: "{{ mysql_password }}"
         query: "CREATE TABLE proje.visitors (name VARCHAR(30), email VARCHAR(30), phone VARCHAR(30), photo VARCHAR(30));"
       vars:
-        mysql_password: "master1234"
+        mysql_password: "master1236"
       ignore_errors: yes
 
 
-    - name: Check if index.html exists
+    - name: 21/36. Check if index.html exists
       ansible.builtin.stat:
         path: /var/www/html/index.html
       register: index_stat
 
-    - name: Move the source/app/index.html directory to the /var/www/html directory
+    - name: 22/36. Move the source/app/index.html directory to the /var/www/html directory
       ansible.builtin.copy:
         src: source/app/index.html
         dest: /var/www/html/index.html
       when: not index_stat.stat.exists
 
-    - name: Check if add.php exists
+    - name: 23/36. Check if add.php exists
       ansible.builtin.stat:
         path: /var/www/html/add.php
       register: add_stat
 
-    - name: Move the source/app/add.php directory to the /var/www/html directory
+    - name: 24/36. Move the source/app/add.php directory to the /var/www/html directory
       ansible.builtin.copy:
         src: source/app/add.php
         dest: /var/www/html/add.php
       when: not add_stat.stat.exists
 
-    - name: Check if view.php exists
+    - name: 25/36. Check if view.php exists
       ansible.builtin.stat:
         path: /var/www/html/view.php
       register: view_stat
 
-    - name: Move the source/app/view.php directory to the /var/www/html directory
+    - name: 26/36. Move the source/app/view.php directory to the /var/www/html directory
       ansible.builtin.copy:
         src: source/app/view.php
         dest: /var/www/html/view.php
       when: not view_stat.stat.exists
       
-    - name: update to the file add.php
+    - name: 27/36. update to the file add.php
       ansible.builtin.shell:
         cmd: sed -i '9d' /var/www/html/add.php && sed -i '9i $servername = "{{rds_endpoint}}";' /var/www/html/add.php
     
-    - name: update to the file view.php
+    - name: 28/36. update to the file view.php
       ansible.builtin.shell:
         cmd: sed -i '2d' /var/www/html/view.php && sed -i '2i $servername = "{{rds_endpoint}}";' /var/www/html/view.php
 
-    - name: move ansible/source/s3.sh to /var/www/html
+    - name: 29/36. move ansible/source/s3.sh to /var/www/html
       ansible.builtin.copy:
         src: source/s3.sh
         dest: /var/www/html/s3.sh
-        force: false
+        force: true
 
-    - name: Crontab download
+    - name: 30/36. Crontab download
       ansible.builtin.yum:
         name: cronie
         state: present
       
-    - name: to active Crontab
+    - name: 31/36. to active Crontab
       ansible.builtin.service:
-        name: croud
+        name: crond
         state: started
         enabled: true
 
-    - name: Crontab s3.sh is run every 2 minutes
+    - name: 32/36. Crontab s3.sh is run every 2 minutes
       ansible.builtin.cron:
         name: "Run s3.sh every 2 minutes"
         minute: "*/2"
@@ -189,8 +190,20 @@
         job: "/var/www/html/s3.sh"
         state: present
 
-    - name: install php-mysqnd
+    - name: 33/36. install php-mysqnd
       ansible.builtin.shell:
         cmd: sudo yum install php php-mysqlnd -y
       
-    
+    - name: 34/36. copy setAWS.sh to /var/
+      ansible.builtin.copy:
+        src: source/setAWS.sh
+        dest: /var/setAWS.sh
+        force: true
+
+    - name: 35/36. run setAWS.sh
+      ansible.builtin.shell:
+        cmd: bash /var/setAWS.sh
+
+    - name: 36/36. stop instance
+      ansible.builtin.shell:
+        cmd: aws ec2 stop-instances --instance-ids {{instance_id}}

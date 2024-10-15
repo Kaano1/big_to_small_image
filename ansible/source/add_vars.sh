@@ -1,2 +1,0 @@
-sed -i '5i  \
-  vars:\n    ansible_python_interpreter: /usr/bin/python3\n    efs_cmd: sudo mount -t efs -o tls fs-0bae8d0270fb8ba45:/ /var/www/html/\n    rds_endpoint: projedbinstance.c9ey2oyuyegx.eu-north-1.rds.amazonaws.com\n    efs_mount_forever: sed -i "2i fs-0bae8d0270fb8ba45:/ /var/www/html efs defaults,_netdev 0 0" /etc/fstab' ansible/main.yml
